@@ -7,6 +7,11 @@ on:
       - claude/setup-android-emulator-SLSGn
   workflow_dispatch:
 
+# Required secrets (add in GitHub → Settings → Secrets → Actions):
+#   UNITY_EMAIL     → your Unity account email
+#   UNITY_PASSWORD  → your Unity account password
+#   UNITY_LICENSE   → leave EMPTY for Personal license (not needed)
+
 jobs:
   build:
     name: Build Android APK
@@ -14,14 +19,14 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      # ── 1. Checkout ──────────────────────────────────────────────────
+      # -- 1. Checkout --------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
 
-      # ── 2. Cache Unity Library ────────────────────────────────────────
+      # -- 2. Cache Unity Library ---------------------------------------
       - name: Cache Unity Library
         uses: actions/cache@v4
         with:
@@ -31,12 +36,12 @@ jobs:
             Library-Android-
             Library-
 
-      # ── 3. Build with GameCI ──────────────────────────────────────────
+      # -- 3. Build with GameCI -----------------------------------------
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL:   ${{ secrets.UNITY_EMAIL }}
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: 2022.3.22f1
@@ -47,7 +52,7 @@ jobs:
           androidExportType: androidPackage
           androidSymbolType: none
 
-      # ── 4. Upload APK artifact ────────────────────────────────────────
+      # -- 4. Upload APK artifact ---------------------------------------
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

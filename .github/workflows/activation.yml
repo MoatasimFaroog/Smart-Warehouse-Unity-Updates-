@@ -1,22 +1,28 @@
-name: Get Unity Activation File (.alf)
+name: Verify Unity Credentials
 
 on:
   workflow_dispatch:
 
+# Run this workflow FIRST to confirm your Unity credentials work.
+# Required secrets: UNITY_EMAIL, UNITY_PASSWORD
+# Optional secret:  UNITY_LICENSE (only needed for Pro/Plus licenses)
+
 jobs:
-  activation:
-    name: Request Unity activation file
+  verify:
+    name: Verify Unity login
     runs-on: ubuntu-latest
     steps:
-      - name: Request manual activation file
-        uses: game-ci/unity-request-activation-file@v2
-        id: getalf
+      - uses: actions/checkout@v4
+
+      - name: Activate Unity (Personal license)
+        uses: game-ci/unity-activate@v4
+        env:
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: 2022.3.22f1
 
-      - name: Upload .alf artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Unity_v2022.x.alf
-          path: ${{ steps.getalf.outputs.filePath }}
-          retention-days: 1
+      - name: Return Unity license
+        uses: game-ci/unity-return-license@v4
+        if: always()
