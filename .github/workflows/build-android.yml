@@ -10,15 +10,25 @@ on:
 # Required secrets (add in GitHub → Settings → Secrets → Actions):
 #   UNITY_EMAIL     → your Unity account email
 #   UNITY_PASSWORD  → your Unity account password
-#   UNITY_LICENSE   → leave EMPTY for Personal license (not needed)
+#   UNITY_LICENSE   → contents of .ulf file (Pro/Plus only; leave empty for Personal)
 
 jobs:
   build:
     name: Build Android APK
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
+      # -- 0. Add swap space (Unity builds need extra memory) ------------
+      - name: Add swap space
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 8G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
       # -- 1. Checkout --------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4

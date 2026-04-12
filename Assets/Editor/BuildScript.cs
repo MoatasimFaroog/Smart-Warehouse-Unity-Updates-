@@ -56,12 +56,14 @@ namespace NomadGo.Editor
 
         private static void ApplyAndroidSettings()
         {
-            // Scripting backend: IL2CPP
+            // Scripting backend: Mono (faster build, lower memory — suitable for emulator testing)
+            // Switch to IL2CPP only when building for Play Store release.
             PlayerSettings.SetScriptingBackend(
-                BuildTargetGroup.Android, ScriptingImplementation.IL2CPP);
+                BuildTargetGroup.Android, ScriptingImplementation.Mono2x);
 
-            // Architecture: ARM64 only
-            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            // Architecture: ARMv7 + ARM64 (Mono supports both; IL2CPP would need ARM64-only)
+            PlayerSettings.Android.targetArchitectures =
+                AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
             // Min / target SDK
             PlayerSettings.Android.minSdkVersion    = AndroidSdkVersions.AndroidApiLevel24;
