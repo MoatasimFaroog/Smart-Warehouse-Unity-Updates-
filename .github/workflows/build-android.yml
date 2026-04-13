@@ -47,12 +47,12 @@ jobs:
             Library-
 
       # -- 3. Build with GameCI -----------------------------------------
-      # Using GameCI's built-in build (no custom buildMethod) to isolate
-      # whether the issue is license/Unity or our custom build script.
+      # Personal license: only UNITY_EMAIL + UNITY_PASSWORD needed.
+      # UNITY_LICENSE (the .ulf file) is intentionally omitted here because
+      # a Windows-generated .ulf will not activate on a Linux runner.
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         env:
-          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
