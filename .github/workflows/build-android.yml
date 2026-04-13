@@ -47,6 +47,8 @@ jobs:
             Library-
 
       # -- 3. Build with GameCI -----------------------------------------
+      # Using GameCI's built-in build (no custom buildMethod) to isolate
+      # whether the issue is license/Unity or our custom build script.
       - name: Build Android APK
         uses: game-ci/unity-builder@v4
         env:
@@ -58,7 +60,6 @@ jobs:
           targetPlatform: Android
           buildName: NomadGo-SpatialVision
           buildsPath: Builds
-          buildMethod: NomadGo.Editor.BuildScript.BuildAndroid
           androidExportType: androidPackage
           androidSymbolType: none
 
